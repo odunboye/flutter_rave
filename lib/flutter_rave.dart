@@ -32,6 +32,7 @@ class RaveCardPayment {
   final Function onClosed;
   final BuildContext context;
   final bool isDemo;
+  final double width;
 
   const RaveCardPayment({
     Key key,
@@ -45,6 +46,7 @@ class RaveCardPayment {
     this.onSuccess,
     this.onFailure,
     this.onClosed,
+    this.width,
     @required this.context,
   });
 
@@ -53,6 +55,7 @@ class RaveCardPayment {
       context: context,
       builder: (dialogContext) {
         return _AddDebitCardScreen(
+          width: width,
           isDemo: this.isDemo,
           publicKey: this.publicKey,
           encKey: this.encKey,
@@ -103,12 +106,7 @@ class CreditCardInfo extends Equatable {
 
   CreditCardInfo(
       this.cardNumber, this.expirationMonth, this.expirationYear, this.cvv)
-      : super([
-          cvv,
-          expirationMonth,
-          expirationYear,
-          cardNumber,
-        ]);
+      : super();
 
   bool get isComplete {
     return cardNumber != null &&
@@ -120,6 +118,10 @@ class CreditCardInfo extends Equatable {
         cvv != null &&
         cvv.isNotEmpty;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }
 
 class _AddDebitCardScreen extends StatefulWidget {
@@ -134,6 +136,7 @@ class _AddDebitCardScreen extends StatefulWidget {
   final Function onSuccess;
   final Function onFailure;
   final Function onClose;
+  final double width;
 
   const _AddDebitCardScreen({
     Key key,
@@ -147,6 +150,7 @@ class _AddDebitCardScreen extends StatefulWidget {
     this.onSuccess,
     this.onFailure,
     this.onClose,
+    this.width,
   }) : super(key: key);
 
   @override
@@ -173,129 +177,130 @@ class __AddDebitCardScreenState extends State<_AddDebitCardScreen> {
             AbsorbPointer(),
             SafeArea(
                 child: Center(
-                  child: Form(
-                    key: _globalKey,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Stack(
-                        alignment: AlignmentDirectional.center,
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  SizedBox(
-                                    child: RaveProvider(
-                                      isDemo: widget.isDemo,
-                                      publicKey: widget.publicKey,
-                                      encKey: widget.encKey,
-                                      transactionRef: widget.transactionRef,
+              child: Form(
+                key: _globalKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: <Widget>[
+                      Container(
+                        width: widget.width == null ? null : widget.width,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              SizedBox(
+                                child: RaveProvider(
+                                  isDemo: widget.isDemo,
+                                  publicKey: widget.publicKey,
+                                  encKey: widget.encKey,
+                                  transactionRef: widget.transactionRef,
+                                  amount: widget.amount,
+                                  email: widget.email,
+                                  subaccounts: widget.subaccounts,
+                                  onSuccess: widget.onSuccess,
+                                  onFailure: widget.onSuccess,
+                                  cardInfo: _cardInfo,
+                                  builder: (context, processCard) {
+                                    _processCard = processCard;
+                                    return _AddDebitCardWidget(
                                       amount: widget.amount,
-                                      email: widget.email,
-                                      subaccounts: widget.subaccounts,
-                                      onSuccess: widget.onSuccess,
-                                      onFailure: widget.onSuccess,
-                                      cardInfo: _cardInfo,
-                                      builder: (context, processCard) {
-                                        _processCard = processCard;
-                                        return _AddDebitCardWidget(
-                                          amount: widget.amount,
-                                          onValidated: (CreditCardInfo creditCard) {
-                                            if (creditCard != null) {
-                                              setState(
-                                                    () {
-                                                  _cardInfo = creditCard;
-                                                },
-                                              );
-                                            }
-                                            setState(
-                                                  () {
-                                                canContinue = creditCard != null;
-                                              },
-                                            );
+                                      onValidated: (CreditCardInfo creditCard) {
+                                        if (creditCard != null) {
+                                          setState(
+                                            () {
+                                              _cardInfo = creditCard;
+                                            },
+                                          );
+                                        }
+                                        setState(
+                                          () {
+                                            canContinue = creditCard != null;
                                           },
                                         );
                                       },
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: FlatButton(
-                                      color: Theme.of(context).accentColor,
-                                      disabledColor: Colors.grey[300],
-                                      onPressed: canContinue
-                                          ? () async {
-                                        var result;
-                                        try {
-                                          result = await _processCard();
-                                        } catch (e) {
-                                          widget.onFailure(e);
-                                          return;
-                                        }
+                                    );
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: FlatButton(
+                                  color: Theme.of(context).accentColor,
+                                  disabledColor: Colors.grey[300],
+                                  onPressed: canContinue
+                                      ? () async {
+                                          var result;
+                                          try {
+                                            result = await _processCard();
+                                          } catch (e) {
+                                            widget.onFailure(e);
+                                            return;
+                                          }
 
-                                        if (result != null) {
-                                          if (widget.onSuccess != null) {
-                                            widget.onSuccess(result);
-                                          }
-                                        } else {
-                                          if (widget.onFailure != null) {
-                                            widget.onFailure(
-                                                "Transaction Failed");
+                                          if (result != null) {
+                                            if (widget.onSuccess != null) {
+                                              widget.onSuccess(result);
+                                            }
+                                          } else {
+                                            if (widget.onFailure != null) {
+                                              widget.onFailure(
+                                                  "Transaction Failed");
+                                            }
                                           }
                                         }
-                                      }
-                                          : null,
-                                      child: Text(
-                                        "Continue",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
+                                      : null,
+                                  child: Text(
+                                    "Continue",
+                                    style: TextStyle(
+                                      color: Colors.white,
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 10.0,
-                            top: 10.0,
-                            width: 20.0,
-                            height: 20.0,
-                            child: InkWell(
-                              onTap: () {
-                                if (widget.onClose != null) {
-                                  widget.onClose();
-                                }
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.red,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 15,
                                   ),
                                 ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 10.0,
+                        top: 10.0,
+                        width: 20.0,
+                        height: 20.0,
+                        child: InkWell(
+                          onTap: () {
+                            if (widget.onClose != null) {
+                              widget.onClose();
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 15,
                               ),
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                )),
+                ),
+              ),
+            )),
           ],
         ),
       ),

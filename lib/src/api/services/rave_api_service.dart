@@ -103,7 +103,7 @@ class RaveApiService {
     String suggestedAuthValue,
     Map<String, String> billingAddressInfo,
     List<Map<String, dynamic>> subaccounts,
-    String redirectUrl = "http://localhost:8184",
+    String redirectUrl = "https://vapulus.serveo.net/payment/receivepayment",
   }) async {
     final payload = {
       "PBFPubKey": ravePublicKey,

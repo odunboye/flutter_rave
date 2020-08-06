@@ -35,22 +35,22 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Builder(
         builder: (context) => SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Pay Me',
-                  ),
-                  FlatButton.icon(
-                    onPressed: () {
-                      _pay(context);
-                    },
-                    icon: Icon(Icons.email),
-                    label: Text("Pay"),
-                  ),
-                ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Pay Me',
               ),
-            ),
+              FlatButton.icon(
+                onPressed: () {
+                  _pay(context);
+                },
+                icon: Icon(Icons.email),
+                label: Text("Pay"),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -58,8 +58,8 @@ class _MyHomePageState extends State<MyHomePage> {
   _pay(BuildContext context) {
     final _rave = RaveCardPayment(
       isDemo: true,
-      encKey: "c53e399709de57d42e2e36ca",
-      publicKey: "FLWPUBK-d97d92534644f21f8c50802f0ff44e02-X",
+      encKey: "FLWSECK_TESTb9e81a056b55",
+      publicKey: "FLWPUBK_TEST-617c13dff945ac75461aa9255f50ae02-X",
       transactionRef: "hvHPvKYaRuJLlJWSPWGGKUyaAfWeZKnm",
       amount: 100,
       email: "demo1@example.com",

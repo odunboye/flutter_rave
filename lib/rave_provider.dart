@@ -152,7 +152,8 @@ class _RaveProviderState extends State<RaveProvider> {
 
   Future<Map<String, dynamic>> processCard({
     String suggestedAuth,
-    String redirectUrl = "http://127.0.0.1:8184",
+    // String redirectUrl = "http://127.0.0.1:8184", //
+    String redirectUrl = "https://vapulus.serveo.net/payment/receivepayment",
     String suggestedAuthValue,
     Map<String, String> billingAddressInfo,
   }) async {
@@ -522,11 +523,11 @@ class _BillingInfoProviderState extends State<BillingInfoProvider> {
                             : snapshot.data
                                 .map(
                                   (i) => DropdownMenuItem<Map<String, dynamic>>(
-                                        value: i,
-                                        child: Text(
-                                          i["name"],
-                                        ),
-                                      ),
+                                    value: i,
+                                    child: Text(
+                                      i["name"],
+                                    ),
+                                  ),
                                 )
                                 .toList(),
                         hint: Text("Select Country"),

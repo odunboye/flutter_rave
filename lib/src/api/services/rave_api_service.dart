@@ -93,6 +93,7 @@ class RaveApiService {
     String ravePublicKey,
     String raveEncryptionKey, {
     bool isProduction = true,
+    bool isPreAuth,
     String email,
     String firstName,
     String lastName,
@@ -121,6 +122,7 @@ class RaveApiService {
       "phonenumber": phoneNumber,
       "redirect_url": redirectUrl,
       "txRef": transactionReference,
+      "preauthorize": isPreAuth,
     };
 
     print(payload);

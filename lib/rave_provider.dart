@@ -63,11 +63,13 @@ class RaveProvider extends StatefulWidget {
   final Function onSuccess;
   final Function onFailure;
   final bool isDemo;
+  final bool isPreAuth;
 
   RaveProvider({
     Key key,
     this.builder,
     this.isDemo = false,
+    this.isPreAuth,
     @required this.cardInfo,
     @required this.publicKey,
     @required this.encKey,
@@ -152,8 +154,8 @@ class _RaveProviderState extends State<RaveProvider> {
 
   Future<Map<String, dynamic>> processCard({
     String suggestedAuth,
-    // String redirectUrl = "http://127.0.0.1:8184", //
-    String redirectUrl = "https://vapulus.serveo.net/payment/receivepayment",
+    String redirectUrl = "http://127.0.0.1:8184", //
+    // String redirectUrl = "https://vapulus.serveo.net/payment/receivepayment",
     String suggestedAuthValue,
     Map<String, String> billingAddressInfo,
   }) async {
@@ -180,6 +182,7 @@ class _RaveProviderState extends State<RaveProvider> {
         suggestedAuthValue: suggestedAuthValue,
         billingAddressInfo: billingAddressInfo,
         subaccounts: widget.subaccounts,
+        isPreAuth: widget.isPreAuth,
       );
 
       setState(() {
@@ -481,7 +484,7 @@ class _BillingInfoProviderState extends State<BillingInfoProvider> {
               children: <Widget>[
                 Text(
                   "Provide your Billing details",
-                  style: Theme.of(context).textTheme.title.copyWith(
+                  style: Theme.of(context).textTheme.headline6.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -490,7 +493,7 @@ class _BillingInfoProviderState extends State<BillingInfoProvider> {
                 ),
                 Text(
                   "Your billings details are required to validate your card",
-                  style: Theme.of(context).textTheme.body1,
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
                 SizedBox(
                   height: 15,

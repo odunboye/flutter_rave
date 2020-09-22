@@ -52,7 +52,7 @@ class MaskTextInputFormatter extends TextInputFormatter {
 
     return newValue.copyWith(
         text: escapedString,
-        selection: TextSelection.collapsed(offset: position));
+        selection: TextSelection.collapsed(int: position));
   }
 }
 
@@ -76,7 +76,7 @@ class CreditCardTextInputFormatter extends TextInputFormatter {
 
     return newValue.copyWith(
         text: escapedString,
-        selection: TextSelection.collapsed(offset: position));
+        selection: TextSelection.collapsed(int: position));
   }
 
   getEscapedString(String text) {

@@ -32,6 +32,7 @@ class RaveCardPayment {
   final Function onClosed;
   final BuildContext context;
   final bool isDemo;
+  final bool isPreAuth;
   final double width;
 
   const RaveCardPayment({
@@ -43,6 +44,7 @@ class RaveCardPayment {
     @required this.email,
     this.subaccounts,
     this.isDemo = false,
+    this.isPreAuth,
     this.onSuccess,
     this.onFailure,
     this.onClosed,
@@ -55,6 +57,7 @@ class RaveCardPayment {
       context: context,
       builder: (dialogContext) {
         return _AddDebitCardScreen(
+          isPreAuth: isPreAuth,
           width: width,
           isDemo: this.isDemo,
           publicKey: this.publicKey,
@@ -133,6 +136,7 @@ class _AddDebitCardScreen extends StatefulWidget {
   final double amount;
   final String email;
   final bool isDemo;
+  final bool isPreAuth;
   final Function onSuccess;
   final Function onFailure;
   final Function onClose;
@@ -147,6 +151,7 @@ class _AddDebitCardScreen extends StatefulWidget {
     @required this.email,
     this.subaccounts,
     this.isDemo = false,
+    this.isPreAuth,
     this.onSuccess,
     this.onFailure,
     this.onClose,

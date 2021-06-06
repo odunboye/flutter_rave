@@ -47,42 +47,48 @@ class RaveApiService {
 
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (RequestOptions options) {
+        onRequest: (RequestOptions options, handler) {
           print(options.uri.toString());
           print(options.data.toString());
-          return options;
+          // return options;
+          return handler.next(options);
         },
-        onResponse: (Response response) {
+        onResponse: (Response response, handler) {
           print(response.headers.toString());
           print(response.data.toString());
-          return response;
+          // return response;
+          return handler.next(response);
         },
-        onError: (DioError e) {
+        onError: (DioError e, handler) {
           print(e.type.toString());
           print(e.response.headers.toString());
           print(e.response.data.toString());
-          return e; //continue
+          // return e; //continue
+          return handler.next(e);
         },
       ),
     );
 
     _productionDio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (RequestOptions options) {
+        onRequest: (RequestOptions options, handler) {
           print(options.uri.toString());
           print(options.data.toString());
-          return options;
+          // return options;
+          return handler.next(options);
         },
-        onResponse: (Response response) {
+        onResponse: (Response response, handler) {
           print(response.headers.toString());
           print(response.data.toString());
-          return response;
+          // return response;
+          return handler.next(response);
         },
-        onError: (DioError e) {
+        onError: (DioError e, handler) {
           print(e.type.toString());
           print(e.response.headers.toString());
           print(e.response.data.toString());
-          return e; //continue
+          // return e; //continue
+          return handler.next(e);
         },
       ),
     );

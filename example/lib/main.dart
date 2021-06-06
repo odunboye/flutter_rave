@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rave/flutter_rave.dart';
+import 'package:get/get.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,21 +18,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Builder(
         builder: (context) => SingleChildScrollView(
@@ -66,18 +62,13 @@ class _MyHomePageState extends State<MyHomePage> {
       onSuccess: (response) {
         print("$response");
         print("Transaction Successful");
-
-        if (mounted) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Transaction Sucessful!"),
-              backgroundColor: Colors.green,
-              duration: Duration(
-                seconds: 5,
-              ),
-            ),
-          );
-        }
+        Get.snackbar(
+          'Success',
+          'Transaction Successful',
+          barBlur: 20,
+          isDismissible: true,
+          duration: Duration(seconds: 3),
+        );
       },
       onFailure: (err) {
         print("$err");

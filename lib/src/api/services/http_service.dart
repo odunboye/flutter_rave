@@ -27,11 +27,13 @@ class HttpService extends Equatable {
 
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (RequestOptions options) {
-          return options;
+        onRequest: (RequestOptions options, handler) {
+          // return options;
+          return handler.next(options);
         },
-        onResponse: (Response response) {
-          return response;
+        onResponse: (Response response, handler) {
+          // return response;
+          return handler.next(response);
         },
       ),
     );
